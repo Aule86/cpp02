@@ -1,9 +1,20 @@
 #include "Fixed.hpp"
+#include <iostream>
+#include <cmath>
 
 Fixed::Fixed()
 	: nbr (0) {
 		setRawBits(0);
 		std::cout << "Default constructor called\n";
+}
+Fixed::Fixed( const int integer ) {
+	std::cout << "Int constructor called" << std::endl;
+	this->nbr= integer << shift;
+}
+
+Fixed::Fixed( float floater ) {
+	std::cout << "Float constructor called" << std::endl;
+	this->nbr = (int)(roundf(floater * (1 << shift)));
 }
 
 Fixed::Fixed(const Fixed &obj) {
@@ -28,4 +39,16 @@ int	Fixed::getRawBits(void) const {
 
 void	Fixed::setRawBits(int const raw) {
 	this->nbr = raw; 
+}
+
+float Fixed::toFloat( void ) const {
+	return (((float)(this->nbr)) / (1 << shift));
+}
+
+int Fixed::toInt( void ) const {
+	return (this->nbr >> shift);
+}
+std::ostream &operator<<(std::ostream &out, const Fixed &source ) {
+	out << source.toFloat();
+	return (out);
 }
